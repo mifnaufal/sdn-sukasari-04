@@ -12,34 +12,45 @@ export default function LoginForm() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
+  e.preventDefault()
+  setIsLoading(true)
+  setError('')
 
-    try {
-      const res = await fetch('/api/auth/callback/credentials', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      })
+  try {
+    const res = await fetch('/api/auth/callback/credentials', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+      credentials: 'include' // Penting untuk cookies
+    })
 
-      const data = await res.json()
-
-      if (res.ok) {
+    if (res.ok) {
+      // Ambil session untuk redirect berdasarkan role
+      const sessionRes = await fetch('/api/auth/session')
+      const session = await sessionRes.json()
+      
+      if (session.user?.role === 'ADMIN') {
         router.push('/dashboard/admin')
+      } else if (session.user?.role === 'GURU') {
+        router.push('/dashboard/guru')
       } else {
-        setError(data.error || 'Login gagal')
+        router.push('/')
       }
-    } catch (err) {
-      setError('Terjadi kesalahan')
-    } finally {
-      setIsLoading(false)
+    } else {
+      const data = await res.json()
+      setError(data.error || 'Login gagal')
     }
+  } catch (err) {
+    setError('Terjadi kesalahan')
+  } finally {
+    setIsLoading(false)
   }
+}
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
