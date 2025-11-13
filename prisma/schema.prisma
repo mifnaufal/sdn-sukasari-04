@@ -1,15 +1,62 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+  // Kalau pakai PlanetScale, tambahkan ini:
+  // relationMode = "prisma"
+}
+
+model User {
+  id       String   @id @default(cuid())
+  nama     String
+  email    String   @unique
+  password String?
+  role     Role     @default(USER)
+  createdAt DateTime @default(now())
+  kegiatan Kegiatan[]
+}
+
+model Kegiatan {
+  id         String   @id @default(cuid())
+  judul      String
+  deskripsi  String
+  tanggal    DateTime
+  foto       String   // URL Cloudinary / path lokal
+  dibuatOleh User     @relation(fields: [userEmail], references: [email])
+  userEmail  String
+  createdAt  DateTime @default(now())
+}
+
+model Prestasi {
+  id        String   @id @default(cuid())
+  nama      String
+  kategori  String
+  deskripsi String
+  tahun     Int
+  foto      String
+  createdAt DateTime @default(now())
+}
+
+model Guru {
+  id        String   @id @default(cuid())
+  nama      String
+  jabatan   String
+  foto      String
+  deskripsi String?
+  createdAt DateTime @default(now())
+}
+
+model HeroImage {
+  id      String @id @default(cuid())
+  url     String
+  caption String?
+}
+
+enum Role {
+  ADMIN
+  GURU
+  USER
 }
