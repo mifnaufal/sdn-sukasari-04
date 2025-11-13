@@ -73,7 +73,7 @@ export const authOptions: NextAuthOptions = {
     if (user) {
       token.role = user.role;
       token.id = user.id;
-      token.nama = user.nama; // Mapping dari database
+      token.nama = user.nama;
     }
     return token;
   },
