@@ -2,9 +2,11 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link' // ✅ Import Link disini
+import Link from 'next/link'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
+import { signIn } from 'next-auth/react'
+import { toast } from 'react-hot-toast'
 
 export default function LoginForm() {
   const [email, setEmail] = useState('')
@@ -12,45 +14,62 @@ export default function LoginForm() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
-  setIsLoading(true)
-  setError('')
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
 
-  try {
-    const res = await fetch('/api/auth/callback/credentials', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-      credentials: 'include' // Penting untuk cookies
-    })
+    try {
+      // Gunakan signIn dari next-auth/react untuk credentials login
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      })
 
-    if (res.ok) {
-      // Ambil session untuk redirect berdasarkan role
+      // Debugging: log hasil signIn
+      console.log('Sign in result:', result)
+
+      if (result?.error) {
+        setError('Email atau password salah')
+        toast.error('Email atau password salah')
+        return
+      }
+
+      // Ambil session setelah login sukses
       const sessionRes = await fetch('/api/auth/session')
-      const session = await sessionRes.json()
+      const sessionData = await sessionRes.json()
       
-      if (session.user?.role === 'ADMIN') {
+      console.log('Session data after login:', sessionData)
+
+      // Cek session data
+      if (!sessionData.user) {
+        setError('Session tidak tersedia setelah login')
+        toast.error('Session tidak tersedia setelah login')
+        return
+      }
+
+      // Redirect berdasarkan role
+      if (sessionData.user.role === 'ADMIN') {
+        toast.success('Login admin berhasil! 🔑')
         router.push('/dashboard/admin')
-      } else if (session.user?.role === 'GURU') {
+      } else if (sessionData.user.role === 'GURU') {
+        toast.success('Login guru berhasil! 👨‍🏫')
         router.push('/dashboard/guru')
       } else {
+        toast.success('Login berhasil! 👋')
         router.push('/')
       }
-    } else {
-      const data = await res.json()
-      setError(data.error || 'Login gagal')
+
+    } catch (err) {
+      console.error('Login error details:', err)
+      setError('Terjadi kesalahan saat login. Silakan coba lagi.')
+      toast.error('Terjadi kesalahan saat login')
+    } finally {
+      setIsLoading(false)
     }
-  } catch (err) {
-    setError('Terjadi kesalahan')
-  } finally {
-    setIsLoading(false)
   }
-}
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -67,6 +86,7 @@ export default function LoginForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
+        placeholder="contoh@email.com"
       />
       
       <Input
@@ -76,16 +96,27 @@ export default function LoginForm() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
+        placeholder="••••••••"
       />
       
-      <Button type="submit" disabled={isLoading}> {/* ✅ Sekarang disabled prop jalan */}
-        {isLoading ? 'Sedang login...' : 'Login'}
+      <Button type="submit" disabled={isLoading} className="w-full">
+        {isLoading ? (
+          <span className="flex items-center justify-center">
+            <span className="animate-spin mr-2">⏳</span>
+            Sedang login...
+          </span>
+        ) : (
+          'Login'
+        )}
       </Button>
       
-      <div className="text-center">
+      <div className="text-center pt-4 border-t border-gray-200">
         <p className="text-gray-600">
           Belum punya akun?{' '}
-          <Link href="/register" className="text-green-600 hover:text-green-800">
+          <Link 
+            href="/register" 
+            className="text-green-600 hover:text-green-800 font-medium transition-colors"
+          >
             Daftar disini
           </Link>
         </p>

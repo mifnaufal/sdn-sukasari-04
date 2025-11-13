@@ -5,7 +5,6 @@ export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const url = req.nextUrl;
 
-  // Allow public routes
   if (
     url.pathname.startsWith("/login") ||
     url.pathname.startsWith("/register") ||
