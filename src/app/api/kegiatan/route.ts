@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
         deskripsi: validated.deskripsi,
         tanggal: new Date(validated.tanggal),
         foto: body.foto || '',
-        userEmail: userEmail // ✅ Pastikan ini string, bukan null
+        userEmail: userEmail
       }
     })
     

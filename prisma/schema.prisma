@@ -92,7 +92,6 @@ model HeroImage {
   caption String?
 }
 
-
 enum Role {
   ADMIN
   GURU
