@@ -26,13 +26,13 @@ export default async function DashboardLayout({
   }
 
   const navItems = {
-    admin: [
-      { label: 'Dashboard', href: '/dashboard/admin' },
-      { label: 'Kegiatan', href: '/dashboard/admin/kegiatan' },
-      { label: 'Prestasi', href: '/dashboard/admin/prestasi' },
-      { label: 'Guru & Staf', href: '/dashboard/admin/guru' },
-      { label: 'User Management', href: '/dashboard/admin/users' },
-    ],
+  admin: [
+    { label: 'Dashboard', href: '/dashboard/admin' },
+    { label: 'Kegiatan', href: '/dashboard/admin/kegiatan' },
+    { label: 'Prestasi', href: '/dashboard/admin/prestasi' },
+    { label: 'Guru & Staf', href: '/dashboard/admin/guru' },
+    { label: 'User Management', href: '/dashboard/admin/users' },
+  ],
     guru: [
       { label: 'Dashboard', href: '/dashboard/guru' },
       { label: 'Kegiatan Kelas', href: '/dashboard/guru/kegiatan' },
