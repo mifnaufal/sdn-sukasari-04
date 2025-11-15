@@ -87,9 +87,13 @@ model Guru {
 }
 
 model HeroImage {
-  id      String @id @default(cuid())
-  url     String
-  caption String?
+  id        String   @id @default(cuid())
+  url       String
+  caption   String?
+  active    Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
