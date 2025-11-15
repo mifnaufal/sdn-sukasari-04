@@ -96,6 +96,17 @@ model HeroImage {
   updatedAt DateTime @updatedAt
 }
 
+model Contact {
+  id        String   @id @default(cuid())
+  nama      String
+  email     String
+  subjek    String
+  pesan     String
+  status    String   @default("baru")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum Role {
   ADMIN
   GURU
