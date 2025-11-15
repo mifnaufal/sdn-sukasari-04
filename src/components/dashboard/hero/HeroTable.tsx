@@ -1,10 +1,8 @@
 'use client'
-
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 import Button from '@/components/ui/Button'
 import Image from 'next/image'
-
 interface HeroImage {
   id: string
   url: string
@@ -13,7 +11,6 @@ interface HeroImage {
   order: number
   createdAt: Date
 }
-
 export default function HeroTable({ heroImages }: { 
   heroImages: HeroImage[] 
 }) {
@@ -21,10 +18,8 @@ export default function HeroTable({ heroImages }: {
   const [activeStates, setActiveStates] = useState<Record<string, boolean>>(
     heroImages.reduce((acc, img) => ({ ...acc, [img.id]: img.active }), {})
   )
-
   const handleDelete = async (id: string) => {
     if (!confirm('Yakin ingin menghapus hero image ini?')) return
-
     setLoadingId(id)
     try {
       const res = await fetch('/api/hero', {
@@ -34,7 +29,6 @@ export default function HeroTable({ heroImages }: {
         },
         body: JSON.stringify({ id })
       })
-
       if (res.ok) {
         toast.success('Hero image berhasil dihapus! ✅')
         window.location.reload()
@@ -49,13 +43,11 @@ export default function HeroTable({ heroImages }: {
       setLoadingId(null)
     }
   }
-
   const handleToggleActive = async (id: string, currentActive: boolean) => {
     setLoadingId(id)
     try {
       const newActive = !currentActive
       setActiveStates(prev => ({ ...prev, [id]: newActive }))
-      
       const res = await fetch('/api/hero', {
         method: 'PUT',
         headers: {
@@ -63,21 +55,19 @@ export default function HeroTable({ heroImages }: {
         },
         body: JSON.stringify({ id, active: newActive })
       })
-
       if (!res.ok) {
-        setActiveStates(prev => ({ ...prev, [id]: currentActive })) // rollback
+        setActiveStates(prev => ({ ...prev, [id]: currentActive }))
         const data = await res.json()
         throw new Error(data.error || 'Gagal update status')
       }
     } catch (error) {
       console.error('Toggle active error:', error)
       toast.error('Gagal mengubah status aktif')
-      setActiveStates(prev => ({ ...prev, [id]: currentActive })) // rollback
+      setActiveStates(prev => ({ ...prev, [id]: currentActive }))
     } finally {
       setLoadingId(null)
     }
   }
-
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
