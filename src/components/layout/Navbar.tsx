@@ -42,6 +42,7 @@ export default function Navbar() {
             <Link href="/kegiatan" className="block py-2 text-gray-700 hover:text-green-600">Kegiatan</Link>
             <Link href="/prestasi" className="block py-2 text-gray-700 hover:text-green-600">Prestasi</Link>
             <Link href="/guru" className="text-gray-700 hover:text-green-600">Guru & Staf</Link>
+            <Link href="/kontak" className="text-gray-700 hover:text-green-600">Kontak</Link>
             <Link href="/login" className="block py-2">
               <Button>Login</Button>
             </Link>

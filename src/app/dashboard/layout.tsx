@@ -32,6 +32,7 @@ export default async function DashboardLayout({
     { label: 'Prestasi', href: '/dashboard/admin/prestasi' },
     { label: 'Guru & Staf', href: '/dashboard/admin/guru' },
     { label: 'Hero Section', href: '/dashboard/admin/hero' },
+    { label: 'Kontak', href: '/dashboard/admin/kontak' },
     { label: 'User Management', href: '/dashboard/admin/users' },
   ],
     guru: [
