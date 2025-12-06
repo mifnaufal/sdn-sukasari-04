@@ -1,6 +1,6 @@
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ['mysql2'],
+    serverComponentsExternalPackages: ['mysql2', 'bcryptjs'],
   },
 }
 module.exports = nextConfig
