@@ -3,7 +3,7 @@ export interface User {
   name: string;
   email: string;
   role: 'admin' | 'guru' | 'user';
-  created_at: Date;
+  created_at: string;
 }
 export interface SchoolProfile {
   id: number;
@@ -14,21 +14,32 @@ export interface SchoolProfile {
   vision: string;
   mission: string;
   about: string;
+  created_at: string;
 }
 export interface Activity {
   id: number;
   title: string;
   description: string;
-  image_url?: string;
-  date: Date;
+  image_url: string | null;
+  date: string;
   created_by: number;
+  created_at: string;
 }
 export interface Achievement {
   id: number;
   title: string;
   description: string;
-  image_url?: string;
+  image_url: string | null;
   type: 'siswa' | 'sekolah';
-  date: Date;
+  date: string;
   created_by: number;
+  created_at: string;
+}
+export interface Staff {
+  id: number;
+  name: string;
+  position: string;
+  photo_url: string | null;
+  description: string | null;
+  created_at: string;
 }

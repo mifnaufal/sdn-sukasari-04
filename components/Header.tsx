@@ -40,23 +40,23 @@ export default function Header() {
             <Link href="/" className="text-2xl font-bold text-blue-700">
               SDN Sukasari 04
             </Link>
-            <nav className="hidden md:flex space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-blue-600">
-                Beranda
-              </Link>
-              <Link href="/profile" className="text-gray-700 hover:text-blue-600">
-                Profil
-              </Link>
-              <Link href="/activities" className="text-gray-700 hover:text-blue-600">
-                Kegiatan
-              </Link>
-              <Link href="/achievements" className="text-gray-700 hover:text-blue-600">
-                Prestasi
-              </Link>
-              <Link href="/staff" className="text-gray-700 hover:text-blue-600">
-                Staf & Guru
-              </Link>
-            </nav>
+<nav className="hidden md:flex space-x-6">
+  <Link href="/" className="text-gray-700 hover:text-blue-600">
+    Beranda
+  </Link>
+  <Link href="/profile" className="text-gray-700 hover:text-blue-600">
+    Profil
+  </Link>
+  <Link href="/activities" className="text-gray-700 hover:text-blue-600">
+    Kegiatan
+  </Link>
+  <Link href="/achievements" className="text-gray-700 hover:text-blue-600">
+    Prestasi
+  </Link>
+  <Link href="/staff" className="text-gray-700 hover:text-blue-600">
+    Staf & Guru
+  </Link>
+</nav>
           </div>
           <div className="flex items-center space-x-4">
             {loading ? (

@@ -7,10 +7,20 @@ const dbConfig = {
   port: 3306
 };
 const pool = mysql.createPool(dbConfig);
-export async function queryDB(sql: string, values?: any[]) {
+export async function queryDB<T>(sql: string, values?: any[]): Promise<T> {
   try {
     const [rows] = await pool.execute(sql, values);
-    return rows;
+    return rows as T;
+  } catch (error) {
+    console.error('Database error:', error);
+    throw error;
+  }
+}
+export async function querySingle<T>(sql: string, values?: any[]): Promise<T | null> {
+  try {
+    const [rows] = await pool.execute(sql, values);
+    const result = rows as any[];
+    return result.length > 0 ? (result[0] as T) : null;
   } catch (error) {
     console.error('Database error:', error);
     throw error;
