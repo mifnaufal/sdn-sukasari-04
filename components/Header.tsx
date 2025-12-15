@@ -9,19 +9,34 @@ export default function Header() {
   useEffect(() => {
     fetchUser();
   }, []);
-  const fetchUser = async () => {
-    try {
-      const response = await fetch('/api/auth/me');
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
+const fetchUser = async () => {
+  try {
+    setTimeout(async () => {
+      try {
+        const response = await fetch('/api/auth/me', {
+          credentials: 'include'
+        });
+        console.log('🔐 Auth check status:', response.status);
+        if (response.status === 401) {
+          setUser(null);
+          return;
+        }
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+          console.log('👤 User logged in:', data.user.name);
+        }
+      } catch (error) {
+        console.log('⚠️ Auth check failed (normal on first load)');
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error fetching user:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    }, 1000);
+  } catch (error) {
+    setLoading(false);
+  }
+};
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
@@ -58,7 +73,7 @@ export default function Header() {
   </Link>
 </nav>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center spaconst fetchUser ce-x-4">
             {loading ? (
               <div className="w-20 h-10 bg-gray-200 rounded animate-pulse"></div>
             ) : user ? (
